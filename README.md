@@ -5,7 +5,7 @@ A stylish and functional PowerShell profile that looks and feels almost as good 
 
 ## ⚡ Install
 
-Copy code into your powershell profile file
+Copy code in `Microsoft.PowerShell_profile.ps1` into your powershell profile file
 
 ## Customize this profile
 
