@@ -11,7 +11,7 @@ Execute the following command in an elevated PowerShell window to install the Po
 ```
 irm "https://raw.githubusercontent.com/FATC0RK/powershell-profile/refs/heads/dev/setup.ps1" | iex
 ```
-🚨MAY NOT WORK BECAUSE IT IS NOT SIGNED🚨
+🚨MAY NOT WORK BECAUSE IT IS NOT SIGNED BY A CERTIFICATE AUTHORITY🚨
 🚨IF IT DOESN'T WORK JUST COPY THE CODE OF `Microsoft.PowerShell_profile.ps1` INTO YOUR OWN `$profile` AND DELETE THE `Update-Profile` FUNCTION🚨
 
 ## 🛠️ Fix the Missing Font
