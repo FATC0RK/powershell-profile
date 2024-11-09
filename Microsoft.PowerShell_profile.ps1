@@ -1,3 +1,18 @@
+#################################################################################################################################
+############                                                                                                         ############
+############                                          !!!   WARNING:   !!!                                           ############
+############                                                                                                         ############
+############                DO NOT MODIFY THIS FILE. THIS FILE IS HASHED AND UPDATED AUTOMATICALLY.                  ############
+############                    ANY CHANGES MADE TO THIS FILE WILL BE OVERWRITTEN BY COMMITS TO                      ############
+############                            https://github.com/FATC0RK/powershell-profile                                ############
+############                                                                                                         ############
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#
+############                                                                                                         ############
+############                      IF YOU WANT TO MAKE CHANGES, USE THE Edit-Profile FUNCTION                         ############
+############                              AND SAVE YOUR CHANGES IN THE FILE CREATED.                                 ############
+############                                                                                                         ############
+#################################################################################################################################
+
 #opt-out of telemetry before doing anything, only if PowerShell is run as admin
 if ([bool]([System.Security.Principal.WindowsIdentity]::GetCurrent()).IsSystem) {
     [System.Environment]::SetEnvironmentVariable('POWERSHELL_TELEMETRY_OPTOUT', 'true', [System.EnvironmentVariableTarget]::Machine)
@@ -16,6 +31,30 @@ $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 if (Test-Path($ChocolateyProfile)) {
     Import-Module "$ChocolateyProfile"
 }
+
+# Check for Profile Updates
+function Update-Profile {
+    if (-not $global:canConnectToGitHub) {
+        Write-Host "Skipping profile update check due to GitHub.com not responding within 1 second." -ForegroundColor Yellow
+        return
+    }
+
+    try {
+        $url = "https://raw.githubusercontent.com/FATC0RK/powershell-profile/refs/heads/dev/Microsoft.PowerShell_profile.ps1"
+        $oldhash = Get-FileHash $PROFILE
+        Invoke-RestMethod $url -OutFile "$env:temp/Microsoft.PowerShell_profile.ps1"
+        $newhash = Get-FileHash "$env:temp/Microsoft.PowerShell_profile.ps1"
+        if ($newhash.Hash -ne $oldhash.Hash) {
+            Copy-Item -Path "$env:temp/Microsoft.PowerShell_profile.ps1" -Destination $PROFILE -Force
+            Write-Host "Profile has been updated. Please restart your shell to reflect changes" -ForegroundColor Magenta
+        }
+    } catch {
+        Write-Error "Unable to check for `$profile updates"
+    } finally {
+        Remove-Item "$env:temp/Microsoft.PowerShell_profile.ps1" -ErrorAction SilentlyContinue
+    }
+}
+Update-Profile
 
 function Update-PowerShell {
     if (-not $global:canConnectToGitHub) {
@@ -371,3 +410,38 @@ Use 'Show-Help' to display this help message.
 "@
 }
 Write-Host "Use 'Show-Help' to display help"
+
+# SIG # Begin signature block
+# MIIF+AYJKoZIhvcNAQcCoIIF6TCCBeUCAQExDzANBglghkgBZQMEAgEFADB5Bgor
+# BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCB/VnKv59ILfTRL
+# lLtJzFwfHTEs71er+N3tl2QMEA/01aCCA0wwggNIMIICMKADAgECAhB2Ar1EhQO1
+# kkcuujT3xlgOMA0GCSqGSIb3DQEBCwUAMDwxDjAMBgNVBAMMBUFobWVkMSowKAYJ
+# KoZIhvcNAQkBFhthaHVzc2FpbmFobWVkNDFAb3V0bG9vay5jb20wHhcNMjQxMTA5
+# MDU1MzUyWhcNMjkxMjMxMjEwMDAwWjA8MQ4wDAYDVQQDDAVBaG1lZDEqMCgGCSqG
+# SIb3DQEJARYbYWh1c3NhaW5haG1lZDQxQG91dGxvb2suY29tMIIBIjANBgkqhkiG
+# 9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvAV0jLpa+TcosgVTtrCd94eU1t3s8xxATLaW
+# Pkd4I7UaRYUOBaHAHuodt4eBUWh/5bMeXkuCNHZAfmR4kPgRImt/EF0S5S5ldQ11
+# V+6qz5juKCY5xGbPajGvcDNsq5FhaogU6OVJPBBPnK9Y0hwRnN8lrXU/V6cLIaee
+# p80Wi4xZRMTPL5K8xtaBUtxdjRiBsw103QqW8VzDvS6XmjYjfHMqNS8k3ciGc567
+# XUkF9fqSDCMvP76ELgT2pMtwg5677MD0dYBBzrOAR7KFRZ14318JYYG8cbewKiLO
+# 7czKBOxhMwJxlbqWUvAZNJTnRORcyntQi1A/91PG26HStaqkyQIDAQABo0YwRDAO
+# BgNVHQ8BAf8EBAMCBaAwEwYDVR0lBAwwCgYIKwYBBQUHAwMwHQYDVR0OBBYEFM9d
+# 7mryYcIPtUjNflHm9IzGhXKgMA0GCSqGSIb3DQEBCwUAA4IBAQBqu2EvpkdT66UY
+# C3h6HlKPteJ/cDBKa+TGd7z4mIpmYahdY8476kZXRwPVehANuD+4D+11TixWdKK1
+# NNmO+pfsgq0aeBO11ILJ5h9ILaWOSSlV/rMi/rY4LZEzeSjQq5uS6wMzfFa1bpy9
+# U40ORo5fwS9vcTuyWa5Da+rN0mJVf9KhA1AbZPgIbUX6yIH17nCmxcvyOmpcS6gW
+# ttbWRAGOYwhrES61Ky+AHSuvk0zM+L+N9qSjhR7L9PiI9t1+2fcdRGBXpTTkrX+a
+# gAAkZdNJyxf/XdTVgnyRgxZDJxqYi1gcp4m6Ccxs19AftryV7G7UDewdw5aHYwsl
+# GlgpT30uMYICAjCCAf4CAQEwUDA8MQ4wDAYDVQQDDAVBaG1lZDEqMCgGCSqGSIb3
+# DQEJARYbYWh1c3NhaW5haG1lZDQxQG91dGxvb2suY29tAhB2Ar1EhQO1kkcuujT3
+# xlgOMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKECgAAw
+# GQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwGCisG
+# AQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIARRr/OtfALWsaKKEgSPHrNu/UsNMokJ
+# BKr4kS027msgMA0GCSqGSIb3DQEBAQUABIIBAE48zcZCJb7BDruFQ4W7htBsOueI
+# c4x5nh19bQT9l5pzYwY60aeeCFT/MJFcSjF1b5mtDx9tzECnNVXOpIoH9Le+o7Kl
+# 0VInXSY6eS1de/McxqUia8UcrlyFYL9mxxfRpQ11raRp+DTSZ395Q1GY8ARaMzsm
+# cqMospGf0AYywo4cT77mHRdSoHvho5klCE38vldWWJSPbhlKcEXANZWDy451FSbB
+# J18RSjjMtVhIIxk+PIDkE0Om9JU7pzMRDKs08SftLHfGY0Jl7RhvtaI0ddmJcd3I
+# Tw5j9Wo1tCCiRM027vULn1nV5QviSsi3Z/BQQwMhSVaTOfJnfYbS/0eNtgU=
+# SIG # End signature block
