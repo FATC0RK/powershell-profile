@@ -107,6 +107,14 @@ catch {
     Write-Error "Failed to install Oh My Posh. Error: $_"
 }
 
+# gsudo Install
+try {
+    winget install -e --accept-source-agreements --accept-package-agreements gerardog.gsudo
+}
+catch {
+    Write-Error "Failed to install gsudo. Error: $_"
+}
+
 # Font Install
 Install-NerdFonts -FontName "CascadiaCode" -FontDisplayName "CaskaydiaCove NF"
 
