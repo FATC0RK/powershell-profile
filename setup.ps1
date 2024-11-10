@@ -115,6 +115,14 @@ catch {
     Write-Error "Failed to install gsudo. Error: $_"
 }
 
+# winfetch Install
+try {
+    Install-Script -Name winfetch -force
+}
+catch {
+    Write-Error "Failed to install winfetch. Error: $_"
+}
+
 # Font Install
 Install-NerdFonts -FontName "CascadiaCode" -FontDisplayName "CaskaydiaCove NF"
 
