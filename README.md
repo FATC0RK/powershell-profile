@@ -11,7 +11,7 @@ Execute the following command in an elevated PowerShell window to install the Po
 ```
 irm "https://raw.githubusercontent.com/FATC0RK/powershell-profile/refs/heads/main/setup.ps1" | iex
 ```
-🚨MAY NOT WORK BECAUSE IT IS NOT SIGNED BY A CERTIFICATE AUTHORITY🚨
+🚨MAY NOT WORK BECAUSE IT IS NOT SIGNED BY A CERTIFICATE AUTHORITY🚨 <br>
 🚨IF IT DOESN'T WORK JUST COPY THE CODE OF `Microsoft.PowerShell_profile.ps1` INTO YOUR OWN `$profile` AND DELETE THE `Update-Profile` FUNCTION🚨
 
 ## Customize this profile
