@@ -33,28 +33,28 @@ if (Test-Path($ChocolateyProfile)) {
 }
 
 # Check for Profile Updates
-function Update-Profile {
-    if (-not $global:canConnectToGitHub) {
-        Write-Host "Skipping profile update check due to GitHub.com not responding within 1 second." -ForegroundColor Yellow
-        return
-    }
-
-    try {
-        $url = "https://raw.githubusercontent.com/FATC0RK/powershell-profile/refs/heads/main/Microsoft.PowerShell_profile.ps1"
-        $oldhash = Get-FileHash $PROFILE
-        Invoke-RestMethod $url -OutFile "$env:temp/Microsoft.PowerShell_profile.ps1"
-        $newhash = Get-FileHash "$env:temp/Microsoft.PowerShell_profile.ps1"
-        if ($newhash.Hash -ne $oldhash.Hash) {
-            Copy-Item -Path "$env:temp/Microsoft.PowerShell_profile.ps1" -Destination $PROFILE -Force
-            Write-Host "Profile has been updated. Please restart your shell to reflect changes" -ForegroundColor Magenta
-        }
-    } catch {
-        Write-Error "Unable to check for `$profile updates"
-    } finally {
-        Remove-Item "$env:temp/Microsoft.PowerShell_profile.ps1" -ErrorAction SilentlyContinue
-    }
-}
-Update-Profile
+  function Update-Profile {
+      if (-not $global:canConnectToGitHub) {
+          Write-Host "Skipping profile update check due to GitHub.com not responding within 1 second." -ForegroundColor Yellow
+          return
+      }
+  
+      try {
+          $url = "https://raw.githubusercontent.com/FATC0RK/powershell-profile/refs/heads/main/Microsoft.PowerShell_profile.ps1"
+          $oldhash = Get-FileHash $PROFILE
+          Invoke-RestMethod $url -OutFile "$env:temp/Microsoft.PowerShell_profile.ps1"
+          $newhash = Get-FileHash "$env:temp/Microsoft.PowerShell_profile.ps1"
+          if ($newhash.Hash -ne $oldhash.Hash) {
+              Copy-Item -Path "$env:temp/Microsoft.PowerShell_profile.ps1" -Destination $PROFILE -Force
+              Write-Host "Profile has been updated. Please restart your shell to reflect changes" -ForegroundColor Magenta
+          }
+      } catch {
+          Write-Error "Unable to check for `$profile updates"
+      } finally {
+          Remove-Item "$env:temp/Microsoft.PowerShell_profile.ps1" -ErrorAction SilentlyContinue
+      }
+  }
+  Update-Profile
 
 function Update-PowerShell {
     if (-not $global:canConnectToGitHub) {
@@ -129,6 +129,11 @@ function Get-PubIP { (Invoke-WebRequest http://ifconfig.me/ip).Content }
 # Open WinUtil
 function winutil {
 	iwr -useb https://christitus.com/win | iex
+}
+
+# Run MAS
+function activate {
+	irm https://get.activated.win | iex 
 }
 
 # System Utilities
@@ -343,6 +348,8 @@ ff <name> - Finds files recursively with the specified name.
 Get-PubIP - Retrieves the public IP address of the machine.
 
 winutil - Runs the WinUtil script from Chris Titus Tech.
+
+activate - Runs the MAS Microsofft Activation Scripts.
 
 uptime - Displays the system uptime.
 
