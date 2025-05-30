@@ -115,12 +115,12 @@ catch {
     Write-Error "Failed to install gsudo. Error: $_"
 }
 
-# winfetch Install
+# fastfetch Install
 try {
-    Install-Script -Name winfetch -force
+    winget install --id=Fastfetch-cli.Fastfetch  -e --force
 }
 catch {
-    Write-Error "Failed to install winfetch. Error: $_"
+    Write-Error "Failed to install fastfetch. Error: $_"
 }
 
 # Font Install
